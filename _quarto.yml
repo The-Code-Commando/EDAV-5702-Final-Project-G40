@@ -6,11 +6,11 @@ execute:
   echo: true
 
 book:
-  title: "YOUR PROJECT TITLE"
+  title: "Hitting for Six: A Visual Odyssey into the Heart of the Game"
   author:
-    - AUTHOR1 (UNI1)
-    - AUTHOR2 (UNI2)
-  repo-url: https://github.com/YOUR_GITHUB_ACCOUNT/REPO_NAME
+    - Abhik Biswas (UNI - ab5640)
+    - Vedant Goyal (UNI - vg2595 )
+  repo-url: https://github.com/The-Code-Commando/EDAV-5702-Final-Project-G40
   date: today
   page-footer:
     right: |
