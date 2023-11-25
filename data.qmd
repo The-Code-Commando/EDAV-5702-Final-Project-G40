@@ -1,5 +1,12 @@
 # Data
 
+```{r}
+
+x=2
+
+
+```
+
 ## Description
 
 ## Missing value analysis
