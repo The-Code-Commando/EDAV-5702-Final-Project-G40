@@ -1,6 +1,14 @@
 ---
-execute: 
+title: "Problem Set 3 Fall 2023"
+author: [ADD YOUR NAMES HERE]
+execute:
   echo: true
+format:
+  html:
+    fig-width: 6
+    fig-height: 4
+    out-width: 60%
+    embed-resources: true
 ---
 
 # Data
