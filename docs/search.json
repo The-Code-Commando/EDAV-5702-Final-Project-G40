@@ -9,15 +9,22 @@
   {
     "objectID": "data.html#description",
     "href": "data.html#description",
-    "title": "2  Data",
-    "section": "2.1 Description",
-    "text": "2.1 Description"
+    "title": "2  Problem Set 3 Fall 2023",
+    "section": "3.1 Description",
+    "text": "3.1 Description"
   },
   {
     "objectID": "data.html#missing-value-analysis",
     "href": "data.html#missing-value-analysis",
-    "title": "2  Data",
-    "section": "2.2 Missing value analysis",
-    "text": "2.2 Missing value analysis"
+    "title": "2  Problem Set 3 Fall 2023",
+    "section": "3.2 Missing value analysis",
+    "text": "3.2 Missing value analysis"
+  },
+  {
+    "objectID": "data.html",
+    "href": "data.html",
+    "title": "2  Problem Set 3 Fall 2023",
+    "section": "",
+    "text": "3 Data\nCode\n# Load the mtcars dataset\ndata(mtcars)\n\n# Create a scatter plot of mpg (miles per gallon) vs. wt (weight)\nplot(mtcars$wt, mtcars$mpg, \n     main = \"Scatter Plot of MPG vs. Weight\",\n     xlab = \"Weight\",\n     ylab = \"Miles per Gallon\",\n     pch = 16,   # Set the point character to a solid circle\n     col = \"blue\"  # Set the point color to blue\n)"
   }
 ]

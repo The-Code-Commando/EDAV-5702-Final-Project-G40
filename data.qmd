@@ -8,7 +8,7 @@ format:
     fig-width: 6
     fig-height: 4
     out-width: 60%
-    embed-resources: true
+    embed-resources: true
 ---
 
 # Data
