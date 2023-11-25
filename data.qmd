@@ -2,7 +2,18 @@
 
 ```{r}
 
-x=2
+# Load the mtcars dataset
+data(mtcars)
+
+# Create a scatter plot of mpg (miles per gallon) vs. wt (weight)
+plot(mtcars$wt, mtcars$mpg, 
+     main = "Scatter Plot of MPG vs. Weight",
+     xlab = "Weight",
+     ylab = "Miles per Gallon",
+     pch = 16,   # Set the point character to a solid circle
+     col = "blue"  # Set the point color to blue
+)
+
 
 
 ```
