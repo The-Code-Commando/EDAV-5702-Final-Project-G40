@@ -1,1 +1,130 @@
+---
+execute:
+  echo: true
+format:
+  html:
+    fig-width: 11
+    fig-height: 7
+    out-width: 60%
+    embed-resources: true
+---
+
 # Results
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+```{r Libraries}
+
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(dplyr)
+library(parcoords)
+library(d3r)
+library(GGally)
+
+```
+
+
+```{r Data}
+
+df <- read.csv("Cricket_Data_by_season.csv")
+
+df$Country <- sub(".*\\((.*?)\\).*", "\\1",df$Player)
+df$Player <- sub("\\(.*?\\)", paste0(""),df$Player)
+
+df$NotOut <- grepl("\\*", df$HS)
+
+# Convert logical values to "Yes" and "No"
+df$NotOut <- ifelse(df$NotOut, "Yes", "No")
+
+df$HS <- gsub("\\*", "", df$HS)
+
+# Assuming df is your dataframe and Season is the column with season values
+df$start_year <- (sub("/.*", "", df$Season))  # Extract start year
+
+# For cases like "yyyy/yy" or "yyyy/yy", extract start and end years
+if (any(grepl("/", df$Season))) {
+  df$start_year <- (sub("/.*", "", df$Season))
+  df$end_year <- (paste0(substr(df$Season,1,2),
+                                   sub(".*?/(\\d+)$", "\\1", df$Season)))
+
+  } else {
+  # For single-value seasons, start and end years are the same
+  df$end_year <- df$start_year
+}
+
+df$end_year <- gsub("1900", "2000", df$end_year)
+
+df$end_year[df$end_year %in% grep("^.{6}$", df$end_year, value = TRUE)] <- substr(df$end_year[df$end_year %in% grep("^.{6}$", df$end_year, value = TRUE)], 3, 6)
+
+# Convert start_year and end_year to integer
+
+df$Season <- NULL
+
+df <- na.omit(df)
+
+df[] <- lapply(df, function(x) gsub("-", "0", x))
+
+df_Ind <- df[df$Country=="IND" | df$Country=="ICC/IND",]
+
+
+
+df1 <- df_Ind %>%
+  group_by(start_year) %>%
+  summarise(total_runs = sum(as.numeric(RunsDescending)))
+
+odi_stats_ind <- read.csv("India_ODI_stats.csv")
+
+df1$ave_runs <- df1$total_runs/odi_stats_ind$PLD
+
+```
+
+```{r}
+
+###################Plot 1##################################
+ggplot(df1, aes(x=as.numeric(start_year), y=ave_runs))+
+  geom_line()+
+  geom_point()+
+  labs(x="Year", y="Average Runs (by Matches Played)")+
+  scale_x_continuous(breaks=seq(1970,2025,2))
+###################Plot 1##################################
+
+```
+
+```{r}
+
+names(df)[15] <- "start"
+names(df)[16] <- "end"
+names(df)[5] <- "Runs"
+
+decade <- cut(as.numeric(df$start),
+              breaks = seq(1970,2030,by=10),
+              dig.lab = 4,
+              include.lowest = TRUE,
+              right=FALSE)
+
+df$Decade <- decade
+
+filtered_10_20 <- df %>%
+  filter(Decade == "[2010,2020)") %>%
+  group_by(Player, Country) %>%
+  summarise(Runs = sum(as.numeric(Runs)), decade_avg_str = mean(as.numeric(SR)),
+            decade_avg_ba = mean(as.numeric(Ave)))
+
+filtered_10_20 <- filtered_10_20[order(filtered_10_20$Runs,
+                                       decreasing = TRUE),]
+
+```
+
+```{r}
+
+## Add ggplotly later on!
+
+ggparcoord(filtered_10_20[1:20,],
+                  columns=c(3:5),
+                  groupColumn = 1, showPoints = TRUE)
+
+```

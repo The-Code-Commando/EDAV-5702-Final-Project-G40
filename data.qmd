@@ -1,12 +1,10 @@
 ---
-title: "Problem Set 3 Fall 2023"
-author: [ADD YOUR NAMES HERE]
 execute:
   echo: true
 format:
   html:
-    fig-width: 6
-    fig-height: 4
+    fig-width: 11
+    fig-height: 7
     out-width: 60%
     embed-resources: true
 ---
@@ -15,18 +13,46 @@ format:
 
 ```{r}
 
-# Load the mtcars dataset
-data(mtcars)
+df <- read.csv("Cricket_Data_by_season.csv")
 
-# Create a scatter plot of mpg (miles per gallon) vs. wt (weight)
-plot(mtcars$wt, mtcars$mpg, 
-     main = "Scatter Plot of MPG vs. Weight",
-     xlab = "Weight",
-     ylab = "Miles per Gallon",
-     pch = 16,   # Set the point character to a solid circle
-     col = "blue"  # Set the point color to blue
-)
+df$Country <- sub(".*\\((.*?)\\).*", "\\1",df$Player)
+df$Player <- sub("\\(.*?\\)", paste0(""),df$Player)
 
+df$NotOut <- grepl("\\*", df$HS)
+
+# Convert logical values to "Yes" and "No"
+df$NotOut <- ifelse(df$NotOut, "Yes", "No")
+
+df$HS <- gsub("\\*", "", df$HS)
+
+# Assuming df is your dataframe and Season is the column with season values
+df$start_year <- (sub("/.*", "", df$Season))  # Extract start year
+
+# For cases like "yyyy/yy" or "yyyy/yy", extract start and end years
+if (any(grepl("/", df$Season))) {
+  df$start_year <- (sub("/.*", "", df$Season))
+  df$end_year <- (paste0(substr(df$Season,1,2),
+                                   sub(".*?/(\\d+)$", "\\1", df$Season)))
+
+  } else {
+  # For single-value seasons, start and end years are the same
+  df$end_year <- df$start_year
+}
+
+df$end_year <- gsub("1900", "2000", df$end_year)
+
+df$end_year[df$end_year %in% grep("^.{6}$", df$end_year, value = TRUE)] <- substr(df$end_year[df$end_year %in% grep("^.{6}$", df$end_year, value = TRUE)], 3, 6)
+
+# Convert start_year and end_year to integer
+
+df$Season <- NULL
+
+df <- na.omit(df)
+
+df[df=="-"] <- NA
+names(df)[15] <- "start"
+names(df)[16] <- "end"
+names(df)[5] <- "Runs"
 
 
 ```
@@ -34,3 +60,12 @@ plot(mtcars$wt, mtcars$mpg,
 ## Description
 
 ## Missing value analysis
+
+```{r}
+
+library(redav)
+####################Plot2######################
+plot_missing(df)
+####################Plot2######################
+
+```
