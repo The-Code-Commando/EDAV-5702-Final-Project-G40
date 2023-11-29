@@ -30,7 +30,7 @@ library(GGally)
 
 ```{r Data}
 
-df <- read.csv("Cricket_Data_by_season.csv")
+df <- read.csv("Data_Cricket_Data_by_season_all.csv")
 
 df$Country <- sub(".*\\((.*?)\\).*", "\\1",df$Player)
 df$Player <- sub("\\(.*?\\)", paste0(""),df$Player)
@@ -76,7 +76,7 @@ df1 <- df_Ind %>%
   group_by(start_year) %>%
   summarise(total_runs = sum(as.numeric(RunsDescending)))
 
-odi_stats_ind <- read.csv("India_ODI_stats.csv")
+odi_stats_ind <- read.csv("Data_India_ODI_stats.csv")
 
 df1$ave_runs <- df1$total_runs/odi_stats_ind$PLD
 
@@ -120,11 +120,13 @@ filtered_10_20 <- filtered_10_20[order(filtered_10_20$Runs,
 ```
 
 ```{r}
+#| code-link: false
+library(plotly)
 
 ## Add ggplotly later on!
 
-ggparcoord(filtered_10_20[1:20,],
+ggplotly(ggparcoord(filtered_10_20[1:20,],
                   columns=c(3:5),
-                  groupColumn = 1, showPoints = TRUE)
+                  groupColumn = 1, showPoints = TRUE))
 
 ```
