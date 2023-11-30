@@ -1,1 +1,18 @@
 # Introduction
+
+*In the heartlands of our homeland, India, where passion courses through our veins like the sacred rivers, cricket is not just a game; it is a symphony of emotions, an opus played out on the fields and in our hearts. The echoes of joy and tears have reverberated through countless hours spent before the glowing television screen, where each delivery, each swing of the bat, has etched indelible memories in the tapestry of our lives.*
+
+We, the devotees of this divine sport, have danced on the hallowed pitches, feeling the rhythm of the game pulsate through our very beings. Cricket is not mere numbers to us; it is the lyrical verses of a poetic saga, the chapters of a spellbinding story that unfolds with every run, every wicket, every match.
+
+In the realm of cricket, where strategy and skill converge, analytics reign supreme. It's a realm where numbers aren't just statistics but threads in the intricate fabric of the game. Our project is a journey, a voyage into the soul of cricket, where we unravel the threads of data to reveal the hidden stories and subtle nuances that make this sport a masterpiece.
+
+Embarking on this odyssey, our aim is to present insights that resonate with the ardent followers of the game, weaving a narrative that is equally enticing for those stepping onto the field of cricket for the first time. Our visualizations, like strokes of a masterful brush, paint the canvas of cricket with trends, patterns, and stories waiting to be discovered.
+
+As we delve into the realm of numbers, we seek to answer the profound questions that echo across the cricketing universe. The first echoes inquire into the evolution of the game, tracing the trend of average runs scored per match year by year since the inception of the One Day International cricket format. The second movement examines the symphony of batting averages and strike rates, orchestrating the variations of the top 20 run-scorers of the decade starting from 2010.
+
+The grand crescendo arrives as we evaluate the epic tales spun in the One Day International World Cup finals from 2011 to 2023. Here, we observe the innings' progression, dissect the distribution of runs scored by each batsman based on the bowlers, and scrutinize the economy rates of the maestros with the ball.
+
+And then, in the final movement, we turn our gaze to the individual portraits of the cricketing titans of the current decade. With analytical precision, we unveil the strengths and weaknesses of each player, providing a strategic compass for the teams that tread the fields today.
+
+This project is not merely a collection of visualizations; it is a poetic exploration of cricket and beyond. It invites you to join us on a voyage, a journey through the numbers that form the backbone of this beautiful sport, uncovering the nuances that transform cricket from a game to a timeless tale. Welcome to the world where cricket meets art, where numbers dance in harmony, and where the journey is as enchanting as the destination.
+

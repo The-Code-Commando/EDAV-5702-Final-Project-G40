@@ -61,7 +61,7 @@ if (any(grepl("/", df$Season))) {
 
 df$end_year <- gsub("1900", "2000", df$end_year)
 
-df$end_year[df$end_year %in% grep("^.{6}$", df$end_year, value = TRUE)] <- substr(df$end_year[df$end_year %in% grep("^.{6}$", df$end_year, value = TRUE)], 3, 6)
+df$end_year[df$end_year %in% grep("^.{6}$", df$end_year, value = TRUE)] <- substr(df$end_year[df$end_year %in% grep("^.{6}$", df$end_year, value = TRUE)], 3, 6)
 
 # Convert start_year and end_year to integer
 
@@ -69,7 +69,7 @@ df$Season <- NULL
 
 df <- na.omit(df)
 
-df[] <- lapply(df, function(x) gsub("-", "0", x))
+df[] <- lapply(df, function(x) gsub("-", "0", x))
 
 df_Ind <- df[df$Country=="IND" | df$Country=="ICC/IND",]
 
