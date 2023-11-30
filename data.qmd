@@ -9,11 +9,29 @@ format:
     embed-resources: true
 ---
 
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+```{r Libraries}
+
+library(ggplot2)
+library(plotly)
+library(tidyverse)
+library(dplyr)
+library(parcoords)
+library(d3r)
+library(GGally)
+library(forcats)
+library(redav)
+
+```
+
 # Data
 
 ```{r}
 
-df <- read.csv("Cricket_Data_by_season.csv")
+df <- read.csv("Data_Cricket_Data_by_season_all.csv")
 
 df$Country <- sub(".*\\((.*?)\\).*", "\\1",df$Player)
 df$Player <- sub("\\(.*?\\)", paste0(""),df$Player)
@@ -67,5 +85,50 @@ library(redav)
 ####################Plot2######################
 plot_missing(df)
 ####################Plot2######################
+
+```
+
+```{r}
+
+####################### ICC 2011 Final ######################
+
+####### Preprocessing #######
+icc_2011 <- read.csv("Data_ICC_2011_F.csv")
+icc_2011$match_id <- NULL
+
+icc_2011$wicket_type[icc_2011$wicket_type==""] <- NA
+icc_2011$player_dismissed[icc_2011$player_dismissed==""] <- NA
+icc_2011$over <- floor(icc_2011$ball)
+
+over_intervals <- cut(icc_2011$over, breaks=seq(0,50,10),
+                      include.lowest = TRUE,
+                      right = FALSE)
+icc_2011$binned_overs <- over_intervals
+
+plot_missing(icc_2011)
+
+```
+
+```{r}
+
+####################### ICC 2015 Final ######################
+####### Preprocessing #######
+icc_2015 <- read.csv("Data_ICC_2015_F.csv")
+icc_2015$match_id <- NULL
+
+icc_2015$wicket_type[icc_2015$wicket_type==""] <- NA
+icc_2015$player_dismissed[icc_2015$player_dismissed==""] <- NA
+icc_2015$over <- floor(icc_2015$ball)
+
+over_intervals <- cut(icc_2015$over, breaks=seq(0,50,10),
+                      include.lowest = TRUE,
+                      right = FALSE)
+icc_2015$binned_overs <- over_intervals
+####### Preprocessing #######
+
+
+##### Missing Value Plot ####
+
+plot_missing(icc_2015)
 
 ```
