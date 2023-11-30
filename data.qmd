@@ -29,6 +29,33 @@ library(redav)
 
 # Data
 
+## Data Sources and Methodology:
+
+1. ESPN Cricinfo Stats:
+   - Data Collection: ESPN Cricinfo aggregates cricket statistics from various matches, including Test matches, ODIs, and T20Is. The platform is managed by a team of sports journalists and statisticians who curate and update the data regularly.
+   - Data Format: The data is presented on the ESPN Cricinfo website in a user-friendly, tabular format, easily accessible for manual extraction. It includes player profiles, team records, match results, and other cricket-related metrics.
+   - Frequency of Updates: ESPN Cricinfo updates its statistics in near real-time during live matches and provides post-match updates regularly.
+   - Issues/Problems: While ESPN Cricinfo is a reputable source, occasional discrepancies or delays in updating certain statistics may occur. Users should be aware of these potential issues when interpreting the data.
+
+2. Cricsheet:
+   - Data Collection: Cricsheet is a platform that collects and provides ball-by-ball data for cricket matches. The data is sourced from official scorecards, and the platform is maintained by a community of cricket enthusiasts and volunteers.
+   - Data Format: Cricsheet offers downloadable datasets in structured, machine-readable formats (e.g., CSV). The data includes detailed information on individual deliveries, player actions, and match events.
+   - Frequency of Updates: Cricsheet updates its datasets regularly, covering a wide range of matches, both international and domestic.
+   - Issues/Problems: While Cricsheet data is comprehensive, occasional errors or missing information may be present. The reliance on volunteers for data input might introduce some level of inconsistency.
+
+## Data Parsing and Analysis:
+
+- cricketdata R Package:
+  - Data Processing Tool: The "cricketdata" R package is chosen for its efficiency in parsing and processing cricket data from ESPN Cricinfo and Cricsheet.
+  - Functionality: The package streamlines the extraction and transformation of data, converting it into a structured format suitable for analysis.
+  - Compatibility: The "cricketdata" package is designed to seamlessly integrate data from both ESPN Cricinfo and Cricsheet, ensuring a unified dataset for further analysis and visualization.
+
+## Conclusion:
+
+In conclusion, our cricket data visualization project leverages the comprehensive statistics from ESPN Cricinfo and the detailed ball-by-ball data from Cricsheet. The integration of these reputable sources is facilitated by the efficient parsing capabilities of the "cricketdata" R package. By acknowledging potential issues with data quality and using a robust analysis tool, we aim to provide insightful visualizations that enhance the understanding of player and team performance across various cricket formats.
+
+## Preprocessing of Data
+
 ```{r}
 
 df <- read.csv("Data_Cricket_Data_by_season_all.csv")

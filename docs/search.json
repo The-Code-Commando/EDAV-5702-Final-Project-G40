@@ -7,18 +7,46 @@
     "text": "1 Introduction"
   },
   {
+    "objectID": "data.html#data-sources-and-methodology",
+    "href": "data.html#data-sources-and-methodology",
+    "title": "2  Data",
+    "section": "2.1 Data Sources and Methodology:",
+    "text": "2.1 Data Sources and Methodology:\n\nESPN Cricinfo Stats:\n\nData Collection: ESPN Cricinfo aggregates cricket statistics from various matches, including Test matches, ODIs, and T20Is. The platform is managed by a team of sports journalists and statisticians who curate and update the data regularly.\nData Format: The data is presented on the ESPN Cricinfo website in a user-friendly, tabular format, easily accessible for manual extraction. It includes player profiles, team records, match results, and other cricket-related metrics.\nFrequency of Updates: ESPN Cricinfo updates its statistics in near real-time during live matches and provides post-match updates regularly.\nIssues/Problems: While ESPN Cricinfo is a reputable source, occasional discrepancies or delays in updating certain statistics may occur. Users should be aware of these potential issues when interpreting the data.\n\nCricsheet:\n\nData Collection: Cricsheet is a platform that collects and provides ball-by-ball data for cricket matches. The data is sourced from official scorecards, and the platform is maintained by a community of cricket enthusiasts and volunteers.\nData Format: Cricsheet offers downloadable datasets in structured, machine-readable formats (e.g., CSV). The data includes detailed information on individual deliveries, player actions, and match events.\nFrequency of Updates: Cricsheet updates its datasets regularly, covering a wide range of matches, both international and domestic.\nIssues/Problems: While Cricsheet data is comprehensive, occasional errors or missing information may be present. The reliance on volunteers for data input might introduce some level of inconsistency."
+  },
+  {
+    "objectID": "data.html#data-parsing-and-analysis",
+    "href": "data.html#data-parsing-and-analysis",
+    "title": "2  Data",
+    "section": "2.2 Data Parsing and Analysis:",
+    "text": "2.2 Data Parsing and Analysis:\n\ncricketdata R Package:\n\nData Processing Tool: The “cricketdata” R package is chosen for its efficiency in parsing and processing cricket data from ESPN Cricinfo and Cricsheet.\nFunctionality: The package streamlines the extraction and transformation of data, converting it into a structured format suitable for analysis.\nCompatibility: The “cricketdata” package is designed to seamlessly integrate data from both ESPN Cricinfo and Cricsheet, ensuring a unified dataset for further analysis and visualization."
+  },
+  {
+    "objectID": "data.html#conclusion",
+    "href": "data.html#conclusion",
+    "title": "2  Data",
+    "section": "2.3 Conclusion:",
+    "text": "2.3 Conclusion:\nIn conclusion, our cricket data visualization project leverages the comprehensive statistics from ESPN Cricinfo and the detailed ball-by-ball data from Cricsheet. The integration of these reputable sources is facilitated by the efficient parsing capabilities of the “cricketdata” R package. By acknowledging potential issues with data quality and using a robust analysis tool, we aim to provide insightful visualizations that enhance the understanding of player and team performance across various cricket formats."
+  },
+  {
+    "objectID": "data.html#preprocessing-of-data",
+    "href": "data.html#preprocessing-of-data",
+    "title": "2  Data",
+    "section": "2.4 Preprocessing of Data",
+    "text": "2.4 Preprocessing of Data\n\n\nCode\ndf &lt;- read.csv(\"Data_Cricket_Data_by_season_all.csv\")\n\ndf$Country &lt;- sub(\".*\\\\((.*?)\\\\).*\", \"\\\\1\",df$Player)\ndf$Player &lt;- sub(\"\\\\(.*?\\\\)\", paste0(\"\"),df$Player)\n\ndf$NotOut &lt;- grepl(\"\\\\*\", df$HS)\n\n# Convert logical values to \"Yes\" and \"No\"\ndf$NotOut &lt;- ifelse(df$NotOut, \"Yes\", \"No\")\n\ndf$HS &lt;- gsub(\"\\\\*\", \"\", df$HS)\n\n# Assuming df is your dataframe and Season is the column with season values\ndf$start_year &lt;- (sub(\"/.*\", \"\", df$Season))  # Extract start year\n\n# For cases like \"yyyy/yy\" or \"yyyy/yy\", extract start and end years\nif (any(grepl(\"/\", df$Season))) {\n  df$start_year &lt;- (sub(\"/.*\", \"\", df$Season))\n  df$end_year &lt;- (paste0(substr(df$Season,1,2),\n                                   sub(\".*?/(\\\\d+)$\", \"\\\\1\", df$Season)))\n\n  } else {\n  # For single-value seasons, start and end years are the same\n  df$end_year &lt;- df$start_year\n}\n\ndf$end_year &lt;- gsub(\"1900\", \"2000\", df$end_year)\n\ndf$end_year[df$end_year %in% grep(\"^.{6}$\", df$end_year, value = TRUE)] &lt;- substr(df$end_year[df$end_year %in% grep(\"^.{6}$\", df$end_year, value = TRUE)], 3, 6)\n\n# Convert start_year and end_year to integer\n\ndf$Season &lt;- NULL\n\ndf &lt;- na.omit(df)\n\ndf[df==\"-\"] &lt;- NA\nnames(df)[15] &lt;- \"start\"\nnames(df)[16] &lt;- \"end\"\nnames(df)[5] &lt;- \"Runs\""
+  },
+  {
     "objectID": "data.html#description",
     "href": "data.html#description",
     "title": "2  Data",
-    "section": "2.1 Description",
-    "text": "2.1 Description"
+    "section": "2.5 Description",
+    "text": "2.5 Description"
   },
   {
     "objectID": "data.html#missing-value-analysis",
     "href": "data.html#missing-value-analysis",
     "title": "2  Data",
-    "section": "2.2 Missing value analysis",
-    "text": "2.2 Missing value analysis\n\n\nCode\nlibrary(redav)\n####################Plot2######################\nplot_missing(df)\n\n\n\n\n\nCode\n####################Plot2######################\n\n\n\n\nCode\n####################### ICC 2011 Final ######################\n\n####### Preprocessing #######\nicc_2011 &lt;- read.csv(\"Data_ICC_2011_F.csv\")\nicc_2011$match_id &lt;- NULL\n\nicc_2011$wicket_type[icc_2011$wicket_type==\"\"] &lt;- NA\nicc_2011$player_dismissed[icc_2011$player_dismissed==\"\"] &lt;- NA\nicc_2011$over &lt;- floor(icc_2011$ball)\n\nover_intervals &lt;- cut(icc_2011$over, breaks=seq(0,50,10),\n                      include.lowest = TRUE,\n                      right = FALSE)\nicc_2011$binned_overs &lt;- over_intervals\n\nplot_missing(icc_2011)\n\n\n\n\n\n\n\nCode\n####################### ICC 2015 Final ######################\n####### Preprocessing #######\nicc_2015 &lt;- read.csv(\"Data_ICC_2015_F.csv\")\nicc_2015$match_id &lt;- NULL\n\nicc_2015$wicket_type[icc_2015$wicket_type==\"\"] &lt;- NA\nicc_2015$player_dismissed[icc_2015$player_dismissed==\"\"] &lt;- NA\nicc_2015$over &lt;- floor(icc_2015$ball)\n\nover_intervals &lt;- cut(icc_2015$over, breaks=seq(0,50,10),\n                      include.lowest = TRUE,\n                      right = FALSE)\nicc_2015$binned_overs &lt;- over_intervals\n####### Preprocessing #######\n\n\n##### Missing Value Plot ####\n\nplot_missing(icc_2015)"
+    "section": "2.6 Missing value analysis",
+    "text": "2.6 Missing value analysis\n\n\nCode\nlibrary(redav)\n####################Plot2######################\nplot_missing(df)\n\n\n\n\n\nCode\n####################Plot2######################\n\n\n\n\nCode\n####################### ICC 2011 Final ######################\n\n####### Preprocessing #######\nicc_2011 &lt;- read.csv(\"Data_ICC_2011_F.csv\")\nicc_2011$match_id &lt;- NULL\n\nicc_2011$wicket_type[icc_2011$wicket_type==\"\"] &lt;- NA\nicc_2011$player_dismissed[icc_2011$player_dismissed==\"\"] &lt;- NA\nicc_2011$over &lt;- floor(icc_2011$ball)\n\nover_intervals &lt;- cut(icc_2011$over, breaks=seq(0,50,10),\n                      include.lowest = TRUE,\n                      right = FALSE)\nicc_2011$binned_overs &lt;- over_intervals\n\nplot_missing(icc_2011)\n\n\n\n\n\n\n\nCode\n####################### ICC 2015 Final ######################\n####### Preprocessing #######\nicc_2015 &lt;- read.csv(\"Data_ICC_2015_F.csv\")\nicc_2015$match_id &lt;- NULL\n\nicc_2015$wicket_type[icc_2015$wicket_type==\"\"] &lt;- NA\nicc_2015$player_dismissed[icc_2015$player_dismissed==\"\"] &lt;- NA\nicc_2015$over &lt;- floor(icc_2015$ball)\n\nover_intervals &lt;- cut(icc_2015$over, breaks=seq(0,50,10),\n                      include.lowest = TRUE,\n                      right = FALSE)\nicc_2015$binned_overs &lt;- over_intervals\n####### Preprocessing #######\n\n\n##### Missing Value Plot ####\n\nplot_missing(icc_2015)"
   },
   {
     "objectID": "results.html#icc-2011-world-cup-mens-final",
