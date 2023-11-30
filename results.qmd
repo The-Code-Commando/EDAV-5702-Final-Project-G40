@@ -9,7 +9,7 @@ format:
     embed-resources: true
 ---
 
-# Results Data Changed
+# Results
 
 ```{r setup, include=FALSE} 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
@@ -24,6 +24,8 @@ library(dplyr)
 library(parcoords)
 library(d3r)
 library(GGally)
+library(forcats)
+library(redav)
 
 ```
 
@@ -125,8 +127,320 @@ library(plotly)
 
 ## Add ggplotly later on!
 
-ggplotly(ggparcoord(filtered_10_20[1:20,],
+ggparcoord(filtered_10_20[1:20,],
                   columns=c(3:5),
-                  groupColumn = 1, showPoints = TRUE))
+                  groupColumn = 1, showPoints = TRUE)
+```
+
+## ICC 2011 World Cup (Men's) Final
+```{r}
+
+icc_2011 <- read.csv("Data_ICC_2011_F.csv")
+icc_2011$match_id <- NULL
+
+icc_2011$wicket_type[icc_2011$wicket_type==""] <- NA
+icc_2011$player_dismissed[icc_2011$player_dismissed==""] <- NA
+icc_2011$over <- floor(icc_2011$ball)
+
+over_intervals <- cut(icc_2011$over, breaks=seq(0,50,10),
+                      include.lowest = TRUE,
+                      right = FALSE)
+icc_2011$binned_overs <- over_intervals
+
+df_2011_p1 <- icc_2011 %>%
+  group_by(binned_overs, innings) %>%
+  summarize(runs = sum(runs_off_bat)+sum(extras),
+            n_wickets = sum(!is.na(wicket_type)))
+
+################ Plot Type 1 #####################
+
+df_2011_p1 %>%
+  pivot_longer(innings) %>%
+  ggplot(aes(x=binned_overs, y=runs, fill=factor(value)))+
+  geom_col(position="dodge")+
+  scale_x_discrete(breaks=c("[0,10)", "[10,20)","[20,30)", "[30,40)","[40,50]"),
+                   labels=c("1-10", "11-20", "21-30", "31-40", "41-50"))+
+  scale_y_continuous(breaks=seq(0,100,10))+
+  labs(title = "",
+       x = "Overs",
+       y = "Runs Scores",
+       fill = "Innings")+
+  geom_point(aes(y=runs),
+             position=position_dodge(width=0.85),
+             size=df_2011_p1$n_wickets*5, alpha=0.2)+
+  geom_text(vjust = 0, hjust = 0.64, label=df_2011_p1$n_wickets,
+            position = position_dodge(width = 0.80),
+            size=3)
+################ Plot Type 1 #####################
+
+################ Plot Type 2 #####################
+
+inning_2 <- icc_2011[icc_2011$innings==2,]
+
+df_2011_p2a <- inning_2 %>%
+  group_by(binned_overs, striker, bowler) %>%
+  summarise(runs_scored=sum(runs_off_bat))
+
+ggplot(df_2011_p2a, aes(y=bowler, x=runs_scored, fill=binned_overs))+
+  geom_col()+
+  facet_wrap(~striker)+
+  xlab("Runs Scored")+
+  ylab("Bowler")+
+  ggtitle("Runs scored by Indian Batsmen in front of Sri-Lankan Bowlers")
+
+# Plot 2
+inning_1 <- icc_2011[icc_2011$innings==1,]
+
+df_2011_p2b <- inning_1 %>%
+  group_by(binned_overs, striker, bowler) %>%
+  summarise(runs_scored=sum(runs_off_bat))
+
+ggplot(df_2011_p2b, aes(y=bowler, x=runs_scored, fill=binned_overs))+
+  geom_col()+
+  facet_wrap(~striker)+
+  xlab("Runs Scored")+
+  ylab("Bowler")+
+  ggtitle("Runs scored by Sri-Lankan Batsmen in front of Indian Bowlers")
+################ Plot Type 2 #####################
 
 ```
+
+## ICC 2015 World Cup (Men's) Final
+
+```{r}
+
+icc_2015 <- read.csv("Data_ICC_2015_F.csv")
+icc_2015$match_id <- NULL
+
+icc_2015$wicket_type[icc_2015$wicket_type==""] <- NA
+icc_2015$player_dismissed[icc_2015$player_dismissed==""] <- NA
+icc_2015$over <- floor(icc_2015$ball)
+
+over_intervals <- cut(icc_2015$over, breaks=seq(0,50,10),
+                      include.lowest = TRUE,
+                      right = FALSE)
+icc_2015$binned_overs <- over_intervals
+
+df_2015_p1 <- icc_2015 %>%
+  group_by(binned_overs, innings) %>%
+  summarize(runs = sum(runs_off_bat)+sum(extras),
+            n_wickets = sum(!is.na(wicket_type)))
+
+df_2015_p1 %>%
+  pivot_longer(innings) %>%
+  ggplot(aes(x=binned_overs, y=runs, fill=factor(value)))+
+  geom_col(position="dodge")+
+  scale_x_discrete(breaks=c("[0,10)", "[10,20)","[20,30)", "[30,40)","[40,50]"),
+                   labels=c("1-10", "11-20", "21-30", "31-40", "41-50"))+
+  scale_y_continuous(breaks=seq(0,100,10))+
+  labs(title = "",
+       x = "Overs",
+       y = "Runs Scores",
+       fill = "Innings")+
+  geom_point(aes(y=runs),
+             position=position_dodge(width=0.85),
+             size=df_2015_p1$n_wickets*5, alpha=0.2)+
+  geom_text(vjust = 0, hjust = 0.64, label=df_2015_p1$n_wickets,
+            position = position_dodge(width = 0.80),
+            size=3)
+
+################ Plot Type 1 #####################
+
+################ Plot Type 2 #####################
+
+# Plot 1
+inning_2 <- icc_2015[icc_2015$innings==2,]
+
+df_2015_p2a <- inning_2 %>%
+  group_by(binned_overs, striker, bowler) %>%
+  summarise(runs_scored=sum(runs_off_bat))
+
+ggplot(df_2015_p2a, aes(y=bowler, x=runs_scored, fill=binned_overs))+
+  geom_col()+
+  facet_wrap(~striker)+
+  xlab("Runs Scored")+
+  ylab("Bowler")+
+  ggtitle("Runs scored by Australian Batsmen in front of New Zealand Bowlers")
+
+
+# Plot 2
+inning_1 <- icc_2015[icc_2015$innings==1,]
+
+df_2015_p2b <- inning_1 %>%
+  group_by(binned_overs, striker, bowler) %>%
+  summarise(runs_scored=sum(runs_off_bat))
+
+ggplot(df_2015_p2b, aes(y=bowler, x=runs_scored, fill=binned_overs))+
+  geom_col()+
+  facet_wrap(~striker)+
+  xlab("Runs Scored")+
+  ylab("Bowler")+
+  ggtitle("Runs scored by New Zealand Batsmen in front of Australian Bowlers")
+################ Plot Type 2 #####################
+####################### ICC 2015 Final ######################
+
+```
+
+## ICC 2019 World Cup (Men's) Final
+```{r}
+
+####################### ICC 2019 Final ######################
+####### Preprocessing #######
+icc_2019 <- read.csv("Data_ICC_2019_F.csv")
+icc_2019$match_id <- NULL
+
+icc_2019$wicket_type[icc_2019$wicket_type==""] <- NA
+icc_2019$player_dismissed[icc_2019$player_dismissed==""] <- NA
+icc_2019$over <- floor(icc_2019$ball)
+
+over_intervals <- cut(icc_2019$over, breaks=seq(0,50,10),
+                      include.lowest = TRUE,
+                      right = FALSE)
+icc_2019$binned_overs <- over_intervals
+####### Preprocessing #######
+
+# Comment: These missing values don't indicate lack of data but are logical in nature
+
+################ Plot Type 1 #####################
+df_2019_p1 <- icc_2019 %>%
+  group_by(binned_overs, innings) %>%
+  summarize(runs = sum(runs_off_bat)+sum(extras),
+            n_wickets = sum(!is.na(wicket_type)))
+
+df_2019_p1 %>%
+  pivot_longer(innings) %>%
+  ggplot(aes(x=binned_overs, y=runs, fill=factor(value)))+
+  geom_col(position="dodge")+
+  scale_x_discrete(breaks=c("[0,10)", "[10,20)","[20,30)", "[30,40)","[40,50]"),
+                   labels=c("1-10", "11-20", "21-30", "31-40", "41-50"))+
+  scale_y_continuous(breaks=seq(0,100,10))+
+  labs(title = "",
+       x = "Overs",
+       y = "Runs Scores",
+       fill = "Innings")+
+  geom_point(aes(y=runs),
+             position=position_dodge(width=0.85),
+             size=df_2019_p1$n_wickets*5, alpha=0.2)+
+  geom_text(vjust = 0, hjust = 0.64, label=df_2019_p1$n_wickets,
+            position = position_dodge(width = 0.80),
+            size=3)
+################ Plot Type 1 #####################
+
+
+
+################ Plot Type 2 #####################
+
+# Plot 1
+inning_2 <- icc_2019[icc_2019$innings==2,]
+
+df_2019_p2a <- inning_2 %>%
+  group_by(binned_overs, striker, bowler) %>%
+  summarise(runs_scored=sum(runs_off_bat))
+
+ggplot(df_2019_p2a, aes(y=bowler, x=runs_scored, fill=binned_overs))+
+  geom_col()+
+  facet_wrap(~striker)+
+  xlab("Runs Scored")+
+  ylab("Bowler")+
+  ggtitle("Runs scored by New Zealand Batsmen in front of England Bowlers")
+
+
+# Plot 2
+inning_1 <- icc_2019[icc_2019$innings==1,]
+
+df_2019_p2b <- inning_1 %>%
+  group_by(binned_overs, striker, bowler) %>%
+  summarise(runs_scored=sum(runs_off_bat))
+
+ggplot(df_2019_p2b, aes(y=bowler, x=runs_scored, fill=binned_overs))+
+  geom_col()+
+  facet_wrap(~striker)+
+  xlab("Runs Scored")+
+  ylab("Bowler")+
+  ggtitle("Runs scored by England Batsmen in front of New Zealand Bowlers")
+################ Plot Type 2 #####################
+####################### ICC 2019 Final ######################
+
+```
+
+## ICC 2023 World Cup (Men's) Final
+
+```{r}
+
+####################### ICC 2023 Final ######################
+####### Preprocessing #######
+icc_2023 <- read.csv("Data_ICC_2023_F.csv")
+icc_2023$match_id <- NULL
+
+icc_2023$wicket_type[icc_2023$wicket_type==""] <- NA
+icc_2023$player_dismissed[icc_2023$player_dismissed==""] <- NA
+icc_2023$over <- floor(icc_2023$ball)
+
+over_intervals <- cut(icc_2023$over, breaks=seq(0,50,10),
+                      include.lowest = TRUE,
+                      right = FALSE)
+icc_2023$binned_overs <- over_intervals
+####### Preprocessing #######
+
+################ Plot Type 1 #####################
+df_2023_p1 <- icc_2023 %>%
+  group_by(binned_overs, innings) %>%
+  summarize(runs = sum(runs_off_bat)+sum(extras),
+            n_wickets = sum(!is.na(wicket_type)))
+
+df_2023_p1 %>%
+  pivot_longer(innings) %>%
+  ggplot(aes(x=binned_overs, y=runs, fill=factor(value)))+
+  geom_col(position="dodge")+
+  scale_x_discrete(breaks=c("[0,10)", "[10,20)","[20,30)", "[30,40)","[40,50]"),
+                   labels=c("1-10", "11-20", "21-30", "31-40", "41-50"))+
+  scale_y_continuous(breaks=seq(0,100,10))+
+  labs(title = "",
+       x = "Overs",
+       y = "Runs Scores",
+       fill = "Innings")+
+  geom_point(aes(y=runs),
+             position=position_dodge(width=0.85),
+             size=df_2023_p1$n_wickets*5, alpha=0.2)+
+  geom_text(vjust = 0, hjust = 0.64, label=df_2023_p1$n_wickets,
+            position = position_dodge(width = 0.80),
+            size=3)
+################ Plot Type 1 #####################
+
+
+
+################ Plot Type 2 #####################
+
+# Plot 1
+inning_2 <- icc_2023[icc_2023$innings==2,]
+
+df_2023_p2a <- inning_2 %>%
+  group_by(binned_overs, striker, bowler) %>%
+  summarise(runs_scored=sum(runs_off_bat))
+
+ggplot(df_2023_p2a, aes(y=bowler, x=runs_scored, fill=binned_overs))+
+  geom_col()+
+  facet_wrap(~striker)+
+  xlab("Runs Scored")+
+  ylab("Bowler")+
+  ggtitle("Runs scored by Australian Batsmen in front of Indian Bowlers")
+
+
+# Plot 2
+inning_1 <- icc_2023[icc_2023$innings==1,]
+
+df_2023_p2b <- inning_1 %>%
+  group_by(binned_overs, striker, bowler) %>%
+  summarise(runs_scored=sum(runs_off_bat))
+
+ggplot(df_2023_p2b, aes(y=bowler, x=runs_scored, fill=binned_overs))+
+  geom_col()+
+  facet_wrap(~striker)+
+  xlab("Runs Scored")+
+  ylab("Bowler")+
+  ggtitle("Runs scored by Indian Batsmen in front of Australian Bowlers")
+################ Plot Type 2 #####################
+####################### ICC 2023 Final ######################
+
+```
+
