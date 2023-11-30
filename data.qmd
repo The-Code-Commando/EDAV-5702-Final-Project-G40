@@ -29,34 +29,45 @@ library(redav)
 
 # Data
 
-## Data Sources and Methodology:
+## Technical Description
 
-1. ESPN Cricinfo Stats:
-   - Data Collection: ESPN Cricinfo aggregates cricket statistics from various matches, including Test matches, ODIs, and T20Is. The platform is managed by a team of sports journalists and statisticians who curate and update the data regularly.
-   - Data Format: The data is presented on the ESPN Cricinfo website in a user-friendly, tabular format, easily accessible for manual extraction. It includes player profiles, team records, match results, and other cricket-related metrics.
-   - Frequency of Updates: ESPN Cricinfo updates its statistics in near real-time during live matches and provides post-match updates regularly.
-   - Issues/Problems: While ESPN Cricinfo is a reputable source, occasional discrepancies or delays in updating certain statistics may occur. Users should be aware of these potential issues when interpreting the data.
+### Data Sources and Methodology:
 
-2. Cricsheet:
-   - Data Collection: Cricsheet is a platform that collects and provides ball-by-ball data for cricket matches. The data is sourced from official scorecards, and the platform is maintained by a community of cricket enthusiasts and volunteers.
-   - Data Format: Cricsheet offers downloadable datasets in structured, machine-readable formats (e.g., CSV). The data includes detailed information on individual deliveries, player actions, and match events.
-   - Frequency of Updates: Cricsheet updates its datasets regularly, covering a wide range of matches, both international and domestic.
-   - Issues/Problems: While Cricsheet data is comprehensive, occasional errors or missing information may be present. The reliance on volunteers for data input might introduce some level of inconsistency.
+**1. ESPN Cricinfo Stats:**
 
-## Data Parsing and Analysis:
+   + Data Collection: ESPN Cricinfo aggregates cricket statistics from various matches, including Test matches, ODIs, and T20Is. The platform is managed by a team of sports journalists and statisticians who curate and update the data regularly.
+   
+   + Data Format: The data is presented on the ESPN Cricinfo website in a user-friendly, tabular format, easily accessible for manual extraction. It includes player profiles, team records, match results, and other cricket-related metrics.
+   
+   + Frequency of Updates: ESPN Cricinfo updates its statistics in near real-time during live matches and provides post-match updates regularly.
+   
+   + Issues/Problems: While ESPN Cricinfo is a reputable source, occasional discrepancies or delays in updating certain statistics may occur. Users should be aware of these potential issues when interpreting the data.
 
-- cricketdata R Package:
-  - Data Processing Tool: The "cricketdata" R package is chosen for its efficiency in parsing and processing cricket data from ESPN Cricinfo and Cricsheet.
-  - Functionality: The package streamlines the extraction and transformation of data, converting it into a structured format suitable for analysis.
-  - Compatibility: The "cricketdata" package is designed to seamlessly integrate data from both ESPN Cricinfo and Cricsheet, ensuring a unified dataset for further analysis and visualization.
+**2. Cricsheet:**
 
-## Conclusion:
+   + Data Collection: Cricsheet is a platform that collects and provides ball-by-ball data for cricket matches. The data is sourced from official scorecards, and the platform is maintained by a community of cricket enthusiasts and volunteers.
+   
+   + Data Format: Cricsheet offers downloadable datasets in structured, machine-readable formats (e.g., CSV). The data includes detailed information on individual deliveries, player actions, and match events.
+   
+   + Frequency of Updates: Cricsheet updates its datasets regularly, covering a wide range of matches, both international and domestic.
+   
+   + Issues/Problems: While Cricsheet data is comprehensive, occasional errors or missing information may be present. The reliance on volunteers for data input might introduce some level of inconsistency.
 
-In conclusion, our cricket data visualization project leverages the comprehensive statistics from ESPN Cricinfo and the detailed ball-by-ball data from Cricsheet. The integration of these reputable sources is facilitated by the efficient parsing capabilities of the "cricketdata" R package. By acknowledging potential issues with data quality and using a robust analysis tool, we aim to provide insightful visualizations that enhance the understanding of player and team performance across various cricket formats.
+### Data Parsing and Analysis:
+
+**cricketdata R Package:**
+
+  + Data Processing Tool: The "cricketdata" R package is chosen for its efficiency in parsing and processing cricket data from ESPN Cricinfo and Cricsheet.
+  
+  + Functionality: The package streamlines the extraction and transformation of data, converting it into a structured format suitable for analysis.
+  
+  + Compatibility: The "cricketdata" package is designed to seamlessly integrate data from both ESPN Cricinfo and Cricsheet, ensuring a unified dataset for further analysis and visualization.
+
+*In conclusion, our cricket data visualization project leverages the comprehensive statistics from ESPN Cricinfo and the detailed ball-by-ball data from Cricsheet. The integration of these reputable sources is facilitated by the efficient parsing capabilities of the "cricketdata" R package. By acknowledging potential issues with data quality and using a robust analysis tool, we aim to provide insightful visualizations that enhance the understanding of player and team performance across various cricket formats.*
 
 ## Preprocessing of Data
 
-```{r}
+```{r preprocessing}
 
 df <- read.csv("Data_Cricket_Data_by_season_all.csv")
 
@@ -86,7 +97,7 @@ if (any(grepl("/", df$Season))) {
 
 df$end_year <- gsub("1900", "2000", df$end_year)
 
-df$end_year[df$end_year %in% grep("^.{6}$", df$end_year, value = TRUE)] <- substr(df$end_year[df$end_year %in% grep("^.{6}$", df$end_year, value = TRUE)], 3, 6)
+df$end_year[df$end_year %in% grep("^.{6}$", df$end_year, value = TRUE)] <- substr(df$end_year[df$end_year %in% grep("^.{6}$", df$end_year, value = TRUE)], 3, 6)
 
 # Convert start_year and end_year to integer
 
@@ -102,11 +113,38 @@ names(df)[5] <- "Runs"
 
 ```
 
-## Description
+## Research Plan
 
-## Missing value analysis
 
-```{r}
+**1. Evolution of One Day International (ODI) Cricket:**
+
+Research Question: *How has the trend of average runs scored per match evolved year by year since the inception of the ODI cricket format?*
+
+Data Utilization: ESPN Cricinfo Stats provides comprehensive statistics, including average runs scored per match. By leveraging this data source, we can trace the historical evolution of average runs scored in ODIs, identifying trends, peaks, and valleys over the years.
+
+**2. Symphony of Batting Averages and Strike Rates:**
+
+Research Question: *What are the variations in the batting averages and strike rates of the top 20 run-scorers of the decade starting from 2010?*
+
+Data Utilization: Both ESPN Cricinfo Stats and Cricsheet offer player-specific data, allowing us to compile and analyze the batting averages and strike rates of the top 20 run-scorers over the specified decade. This granular data enables a nuanced exploration of how individual performances have shaped the cricketing landscape.
+
+**3. One Day International World Cup Finals Analysis:**
+
+Research Question: *What tales are woven in the ODIs World Cup finals from 2011 to 2023?*
+
+Data Utilization: Cricsheet's ball-by-ball data becomes instrumental here. By dissecting the distribution of runs scored by each batsman based on the bowlers, we can unravel the narratives within World Cup finals. Additionally, scrutinizing the economy rates of bowlers provides insights into the strategies employed during these high-stakes matches.
+
+**4. Individual Portraits of Cricketing Titans:**
+
+Research Question: *What are the strengths and weaknesses of individual cricketing titans in the current decade?*
+
+Data Utilization: Leveraging player-specific data from ESPN Cricinfo, we can delve into the strengths and weaknesses of cricketing titans. This involves analyzing batting averages, strike rates, bowling economy rates, and other relevant metrics, creating detailed portraits that serve as a strategic compass for teams.
+
+
+
+## Missing Value Analysis
+
+```{r missing}
 
 library(redav)
 ####################Plot2######################
@@ -115,7 +153,7 @@ plot_missing(df)
 
 ```
 
-```{r}
+```{r 2011}
 
 ####################### ICC 2011 Final ######################
 
@@ -136,7 +174,7 @@ plot_missing(icc_2011)
 
 ```
 
-```{r}
+```{r 2015}
 
 ####################### ICC 2015 Final ######################
 ####### Preprocessing #######
