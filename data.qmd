@@ -24,6 +24,10 @@ library(d3r)
 library(GGally)
 library(forcats)
 library(redav)
+library(DataExplorer)
+library(Amelia)
+library(naniar)
+library(gridExtra)
 
 ```
 
@@ -113,6 +117,77 @@ names(df)[5] <- "Runs"
 
 ```
 
+
+```{r 2011}
+
+####################### ICC 2011 Final ######################
+
+####### Preprocessing #######
+icc_2011 <- read.csv("Data_ICC_2011_F.csv")
+icc_2011$match_id <- NULL
+
+icc_2011$wicket_type[icc_2011$wicket_type==""] <- NA
+icc_2011$player_dismissed[icc_2011$player_dismissed==""] <- NA
+icc_2011$over <- floor(icc_2011$ball)
+
+over_intervals <- cut(icc_2011$over, breaks=seq(0,50,10),
+                      include.lowest = TRUE,
+                      right = FALSE)
+icc_2011$binned_overs <- over_intervals
+
+```
+
+```{r 2015, include=FALSE}
+
+icc_2015 <- read.csv("Data_ICC_2015_F.csv")
+icc_2015$match_id <- NULL
+
+icc_2015$wicket_type[icc_2015$wicket_type==""] <- NA
+icc_2015$player_dismissed[icc_2015$player_dismissed==""] <- NA
+icc_2015$over <- floor(icc_2015$ball)
+
+over_intervals <- cut(icc_2015$over, breaks=seq(0,50,10),
+                      include.lowest = TRUE,
+                      right = FALSE)
+icc_2015$binned_overs <- over_intervals
+
+
+```
+
+```{r 2019, include=FALSE}
+
+
+icc_2019 <- read.csv("Data_ICC_2019_F.csv")
+icc_2019$match_id <- NULL
+
+icc_2019$wicket_type[icc_2019$wicket_type==""] <- NA
+icc_2019$player_dismissed[icc_2019$player_dismissed==""] <- NA
+icc_2019$over <- floor(icc_2019$ball)
+
+over_intervals <- cut(icc_2019$over, breaks=seq(0,50,10),
+                      include.lowest = TRUE,
+                      right = FALSE)
+icc_2019$binned_overs <- over_intervals
+
+```
+
+```{r 2023, include=FALSE}
+
+
+icc_2023 <- read.csv("Data_ICC_2023_F.csv")
+icc_2023$match_id <- NULL
+
+icc_2023$wicket_type[icc_2023$wicket_type==""] <- NA
+icc_2023$player_dismissed[icc_2023$player_dismissed==""] <- NA
+icc_2023$over <- floor(icc_2023$ball)
+
+over_intervals <- cut(icc_2023$over, breaks=seq(0,50,10),
+                      include.lowest = TRUE,
+                      right = FALSE)
+icc_2023$binned_overs <- over_intervals
+
+```
+
 ## Research Plan
 
 
@@ -144,56 +219,48 @@ Data Utilization: Leveraging player-specific data from ESPN Cricinfo, we can del
 
 ## Missing Value Analysis
 
-```{r missing}
-
-library(redav)
-####################Plot2######################
-plot_missing(df)
-####################Plot2######################
+```{r missing DataExplorer}
+DataExplorer::plot_missing(df)
 
 ```
 
-```{r 2011}
+### Interpretation 
 
-####################### ICC 2011 Final ######################
+This graph gives us an idea about the missing values in the dataset containing the seasonal performance of all the players that ever played the game. The missing values here simply denote the performance of players who have played too less for the statistics to even be generated. Many rows in this dataset correspond to [bowlers](https://en.wikipedia.org/wiki/Bowling_(cricket)), who do not get to score runs (often do not get to play), and hence they have very less records to generate summary statistics.
 
-####### Preprocessing #######
-icc_2011 <- read.csv("Data_ICC_2011_F.csv")
-icc_2011$match_id <- NULL
 
-icc_2011$wicket_type[icc_2011$wicket_type==""] <- NA
-icc_2011$player_dismissed[icc_2011$player_dismissed==""] <- NA
-icc_2011$over <- floor(icc_2011$ball)
+```{r missing naniar}
 
-over_intervals <- cut(icc_2011$over, breaks=seq(0,50,10),
-                      include.lowest = TRUE,
-                      right = FALSE)
-icc_2011$binned_overs <- over_intervals
-
-plot_missing(icc_2011)
+gg_miss_upset(df)
 
 ```
 
-```{r 2015}
+### Interpretation 
 
-####################### ICC 2015 Final ######################
-####### Preprocessing #######
-icc_2015 <- read.csv("Data_ICC_2015_F.csv")
-icc_2015$match_id <- NULL
+This is an *Upset* plot representing the missing values in the dataframe containing the seasonal performance of players. This kind of plot is very useful in understanding the interaction of missing values between columns. The [Batting Average](https://en.wikipedia.org/wiki/Batting_average_(cricket)) column contains over 2000 missing values, while the other columns [50s, 100s](https://en.wikipedia.org/wiki/Century_(cricket)), [Duck Outs](https://en.wikipedia.org/wiki/Duck_(cricket)) and [Strike Rates](https://en.wikipedia.org/wiki/Strike_rate) have just below 1000 missing values, whereas 805 missing values across the intersection of all these columns. The vertical bars denote the cardinality of the missing values based on each intersection of the columns. There are 1110 rows where only the Batting average values are missing, whereas . Rows where 100s, 50s 0s and Strike Rates have missing values, most likely correspond to players who have played very fey games, and their Batting averages have also not been generated. Hence, there is very strong interaction amongst the occurence of missing values across these values. 
+```{r missing WC Data Count Data Explorer}
 
-icc_2015$wicket_type[icc_2015$wicket_type==""] <- NA
-icc_2015$player_dismissed[icc_2015$player_dismissed==""] <- NA
-icc_2015$over <- floor(icc_2015$ball)
+p1 <- DataExplorer::plot_missing(icc_2011)
+p2 <- DataExplorer::plot_missing(icc_2015)
+p3 <- DataExplorer::plot_missing(icc_2019)
+p4 <- DataExplorer::plot_missing(icc_2023)
 
-over_intervals <- cut(icc_2015$over, breaks=seq(0,50,10),
-                      include.lowest = TRUE,
-                      right = FALSE)
-icc_2015$binned_overs <- over_intervals
-####### Preprocessing #######
-
-
-##### Missing Value Plot ####
-
-plot_missing(icc_2015)
 
 ```
+
+### Interpretation
+
+We can observe from the plots above, that the pattern of percentage of missing values is similar, across the different world cup finals from 2011 to 2023. 
+
+This is because the missing values occur in columns such as `player_dismissed`, `legbyes`, `noballs`, `wides` etc. These events seldom occur throughout the game. The [dismissal](https://en.wikipedia.org/wiki/Dismissal_(cricket)) of a player can occur at most 20 times in an entire match, which corresponds to maximum 20 rows in our dataset. 
+
+[Extras](https://en.wikipedia.org/wiki/Extra_(cricket)) are also fairly limited in a game since extras are a reflection of mistake made by a player.
+```{r missing WC Map Amelia}
+
+missmap(icc_2011, main="Missing Data Map - 2011 ICC WC Finals")
+
+missmap(icc_2019, main="Missing Data Map - 2019 ICC WC Finals")
+
+```
+
+The additional information we gain from these charts is that we get to know at what stages of the game the players were dismissed, or extras occurred, and we also get to know the proportion of total missing values.
