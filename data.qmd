@@ -224,10 +224,7 @@ DataExplorer::plot_missing(df)
 
 ```
 
-### Interpretation 
-
-This graph gives us an idea about the missing values in the dataset containing the seasonal performance of all the players that ever played the game. The missing values here simply denote the performance of players who have played too less for the statistics to even be generated. Many rows in this dataset correspond to [bowlers](https://en.wikipedia.org/wiki/Bowling_(cricket)), who do not get to score runs (often do not get to play), and hence they have very less records to generate summary statistics.
-
+### Analysis 1 
 
 ```{r missing naniar}
 
@@ -235,9 +232,12 @@ gg_miss_upset(df)
 
 ```
 
-### Interpretation 
+**Interpretation**
 
-This is an *Upset* plot representing the missing values in the dataframe containing the seasonal performance of players. This kind of plot is very useful in understanding the interaction of missing values between columns. The [Batting Average](https://en.wikipedia.org/wiki/Batting_average_(cricket)) column contains over 2000 missing values, while the other columns [50s, 100s](https://en.wikipedia.org/wiki/Century_(cricket)), [Duck Outs](https://en.wikipedia.org/wiki/Duck_(cricket)) and [Strike Rates](https://en.wikipedia.org/wiki/Strike_rate) have just below 1000 missing values, whereas 805 missing values across the intersection of all these columns. The vertical bars denote the cardinality of the missing values based on each intersection of the columns. There are 1110 rows where only the Batting average values are missing, whereas . Rows where 100s, 50s 0s and Strike Rates have missing values, most likely correspond to players who have played very fey games, and their Batting averages have also not been generated. Hence, there is very strong interaction amongst the occurence of missing values across these values. 
+This graph gives us an idea about the missing values in the dataset containing the seasonal performance of all the players that ever played the game. The missing values here simply denote the performance of players who have played too less for the statistics to even be generated. Many rows in this dataset correspond to [bowlers](https://en.wikipedia.org/wiki/Bowling_(cricket)), who do not get to score runs (often do not get to play), and hence they have very less records to generate summary statistics.
+
+### Analysis 2 
+
 ```{r missing WC Data Count Data Explorer}
 
 p1 <- DataExplorer::plot_missing(icc_2011)
@@ -248,13 +248,12 @@ p4 <- DataExplorer::plot_missing(icc_2023)
 
 ```
 
-### Interpretation
+**Interpretation**
 
-We can observe from the plots above, that the pattern of percentage of missing values is similar, across the different world cup finals from 2011 to 2023. 
+This is an *Upset* plot representing the missing values in the dataframe containing the seasonal performance of players. This kind of plot is very useful in understanding the interaction of missing values between columns. The [Batting Average](https://en.wikipedia.org/wiki/Batting_average_(cricket)) column contains over 2000 missing values, while the other columns [50s, 100s](https://en.wikipedia.org/wiki/Century_(cricket)), [Duck Outs](https://en.wikipedia.org/wiki/Duck_(cricket)) and [Strike Rates](https://en.wikipedia.org/wiki/Strike_rate) have just below 1000 missing values, whereas 805 missing values across the intersection of all these columns. The vertical bars denote the cardinality of the missing values based on each intersection of the columns. There are 1110 rows where only the Batting average values are missing, whereas . Rows where 100s, 50s 0s and Strike Rates have missing values, most likely correspond to players who have played very fey games, and their Batting averages have also not been generated. Hence, there is very strong interaction amongst the occurence of missing values across these values.
 
-This is because the missing values occur in columns such as `player_dismissed`, `legbyes`, `noballs`, `wides` etc. These events seldom occur throughout the game. The [dismissal](https://en.wikipedia.org/wiki/Dismissal_(cricket)) of a player can occur at most 20 times in an entire match, which corresponds to maximum 20 rows in our dataset. 
+### Analysis 3
 
-[Extras](https://en.wikipedia.org/wiki/Extra_(cricket)) are also fairly limited in a game since extras are a reflection of mistake made by a player.
 ```{r missing WC Map Amelia}
 
 missmap(icc_2011, main="Missing Data Map - 2011 ICC WC Finals")
@@ -263,4 +262,12 @@ missmap(icc_2019, main="Missing Data Map - 2019 ICC WC Finals")
 
 ```
 
-The additional information we gain from these charts is that we get to know at what stages of the game the players were dismissed, or extras occurred, and we also get to know the proportion of total missing values.
+**Interpretation**
+
+We can observe from the plots above, that the pattern of percentage of missing values is similar, across the different world cup finals from 2011 to 2023. 
+
+This is because the missing values occur in columns such as `player_dismissed`, `legbyes`, `noballs`, `wides` etc. These events seldom occur throughout the game. The [dismissal](https://en.wikipedia.org/wiki/Dismissal_(cricket)) of a player can occur at most 20 times in an entire match, which corresponds to maximum 20 rows in our dataset. 
+
+[Extras](https://en.wikipedia.org/wiki/Extra_(cricket)) are also fairly limited in a game since extras are a reflection of mistake made by a player.
+
+From the second plot, the additional information we gain is that we get to know at what stages of the game the players were dismissed, or extras occurred, and we also get to know the proportion of total missing values.
