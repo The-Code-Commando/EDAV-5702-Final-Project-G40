@@ -447,4 +447,16 @@ ggplot(df_2023_p2b, aes(y=bowler, x=runs_scored, fill=binned_overs))+
 ####################### ICC 2023 Final ######################
 
 ```
+## Toss and Match Outcome
 
+```{r}
+
+toss <- read.csv("toss_data.csv")
+
+toss <- toss[!(toss$Team=='PAK'|toss$Team=='SA'|toss$Team=='WI'),]
+
+colors_fill <- c("#3498db", "#e74c3c")
+vcd::mosaic(Toss_Won~Team+Format, toss, direction=c("v", "v", "h"),
+            highlighting_fill = colors_fill)
+
+```
