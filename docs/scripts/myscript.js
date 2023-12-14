@@ -95,7 +95,7 @@ loadData(url).then(function(objects) {
       .attr("x1", function(d) { return d3.arc().innerRadius(radius).outerRadius(radius * 1.16).centroid(d)[0]; })
       .attr("y1", function(d) { return d3.arc().innerRadius(radius).outerRadius(radius * 1.16).centroid(d)[1]; })
       .attr("x2", function(d) { return d3.arc().innerRadius(radius * 0.75).outerRadius(radius * 1.16).centroid(d)[0]; })
-      .attr("y2", function(d) { return d3.arc().innerRadius(radius * 0.75).outerRadius(radius * 1.16).centroid(d)[1]; })
+      .attr("y2", function(d) { return d3.arc().innerRadius(radius * 0.75).outerRadius(radius * 1.16).centroid(d)[1];})
       .attr("stroke", "black")
       .style("stroke-width", "1.2px");
 
