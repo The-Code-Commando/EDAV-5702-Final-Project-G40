@@ -2,8 +2,7 @@ function loadData(url) {
   return d3.csv(url).then(function(data) {
     // Map each row to an object
     const objects = data.map(function(row) {
-      // Modify this part based on your CSV structure
-      // For example, if your CSV has columns 'name', 'age', 'city'
+
       return {
         // player: row.Player,
         // out: row.OUT,
@@ -21,21 +20,18 @@ function loadData(url) {
   });
 }
 
-// Example usage
+
 const url = "https://raw.githubusercontent.com/Abhik-Biswas/Project-CSV/main/Data_Player_dismissial_preprocessed.csv";
 loadData(url).then(function(objects) {
   console.log(objects);
 
   const data = objects;
   const width = 550,
-    height = 400,
-    margin = 40;
+    height = 450,
+    margin = 75;
 
-  // The radius of the pieplot is half the width or half the         height (smallest one). I subtract a bit of margin.
+
   const radius = Math.min(width, height) / 2 - margin;
-
-// append the svg object to the div called 'my_dataviz'
-
 
 
   const svg = d3.select("div#plot")
@@ -43,26 +39,25 @@ loadData(url).then(function(objects) {
     .attr("width", width)
     .attr("height", height)
   .append("g")
-    .attr("transform", `translate(${width/2}, ${height/2})`);
+    .attr("transform", `translate(295, 220)`);
 
   const color = d3.scaleOrdinal()
   .domain(["caught", "bowled", "stumped", "caught_behind", "lbw", "run_out", "others"])
   .range(d3.schemeDark2);
 
-  // A function that create / update the plot for a given variable:
+
 function update(data) {
 
   // Compute the position of each group on the pie:
   const pie = d3.pie()
     .value(function(d) {return d[1]; })
-    .sort(function(a, b) { return d3.ascending(a.key, b.key);} ) // This make sure that group order remains the same in the pie chart
+    .sort(function(a, b) { return d3.ascending(a.key, b.key);} )
   const data_ready = pie(Object.entries(data))
 
   // map to data
   const u = svg.selectAll("path")
     .data(data_ready)
 
-  // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
   u
     .join('path')
     .transition()
@@ -113,12 +108,13 @@ update(data[0]);
 
 var dropdown = d3.select("div#plot")
   .append("select")
-  .attr("id", "datasetDropdown")
+  .attr("class", "dropdown-btn")
   .on("change", function() {
     update(data[this.value]);
   });
 
 dropdown.selectAll("option")
+  .attr("id", "inDropdown")
   .data(["SR Tendulkar", "KC Sangakkara", "V Kohli", "RT Ponting", "ST Jayasuriya", "DPMD Jayawardene", "Inzamam-Ul-Haq", "JH Kallis", "SC Ganguly", "R Dravid", "MS Dhoni"])
   .enter().append("option")
   .attr("value", (d,i)=>i)
