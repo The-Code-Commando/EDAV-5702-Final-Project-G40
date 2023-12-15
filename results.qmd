@@ -31,7 +31,7 @@ library(redav)
 
 
 
-```{r Data}
+```{r Data, include=FALSE}
 
 df <- read.csv("Data_Cricket_Data_by_season_all.csv")
 
@@ -85,19 +85,32 @@ df1$ave_runs <- df1$total_runs/odi_stats_ind$PLD
 
 ```
 
+## Tracking the Trend: Mean Runs Per Match in the History of ODI Cricket
+
 ```{r}
 
-###################Plot 1##################################
 ggplot(df1, aes(x=as.numeric(start_year), y=ave_runs))+
   geom_line()+
+  geom_smooth(method = "loess", span=0.8)+
   geom_point()+
-  labs(x="Year", y="Average Runs (by Matches Played)")+
+  labs(x="Year", y="Average Runs (by Matches Played)", title = "Trend of Average Runs per Match")+
   scale_x_continuous(breaks=seq(1970,2025,2))
-###################Plot 1##################################
-
 ```
 
-```{r}
+**Interpretation**
+
+The presented line graph illustrates the temporal evolution of the average number of runs scored per match in men's One Day Internationals (ODIs) in international cricket, spanning the years 1971 to 2023. The discernible trend reveals a consistent augmentation in the average runs per match over this period.
+
+Notably, the data portrays a marked rise in scoring rates, with the average score per match escalating from approximately 200 runs in 1971 to surpassing 300 runs by the year 2023. This substantial increase prompts an examination of contributing factors within the realm of cricket dynamics.
+
+One pivotal influence on the heightened scoring trend is attributed to advancements in batting techniques and equipment. The contemporary cricketer, wielding modernized bats, demonstrates an enhanced ability to strike the ball with greater force and distance. Furthermore, alterations in playing conditions, particularly smaller and swifter outfields, have facilitated an environment conducive to frequent boundary scoring.
+
+A significant paradigm shift in bowling strategies is also discernible. Historically characterised by a focus on tight line and length, bowlers in recent years have embraced a more aggressive approach, directing their efforts towards attacking the batsmen by targeting the stumps. This strategic shift has resulted in an increased frequency of high-scoring encounters.
+
+The implications of this burgeoning scoring trend have elicited diverse reactions among cricket enthusiasts. While some revel in the heightened excitement afforded by high-scoring matches, others lament the potential dilution of traditional batting and bowling skills. The evolving dynamics of international cricket, as depicted by this data, underscore the multifaceted interplay between technological advancements, strategic innovations, and the nuanced preferences of cricket aficionados.
+
+
+```{r, include=FALSE}
 
 names(df)[15] <- "start"
 names(df)[16] <- "end"
@@ -122,18 +135,50 @@ filtered_10_20 <- filtered_10_20[order(filtered_10_20$Runs,
 
 ```
 
-```{r}
-#| code-link: false
-library(plotly)
+## Cricket's Dynamic Duo: Investigating the Correlation of Batting Average and Strike Rate
 
-## Add ggplotly later on!
+```{r}
 
 ggparcoord(filtered_10_20[1:20,],
                   columns=c(3:5),
                   groupColumn = 1, showPoints = TRUE)
 ```
 
-## ICC 2011 World Cup (Men's) Final
+**Interpretation**
+
+*Before we delve into the interpretations from this plot, let us first understand batting averages and strike rates:*
+
+**Batting Averages:** In the realm of cricket, a player's batting average is determined by dividing their total run count by the number of times they've been dismissed. It's important to note that a lofty total runs tally doesn't necessarily guarantee a formidable batting average. 
+There are several factors contributing to this:
+
+*Not Outs:* Batsmen who consistently conclude innings without being dismissed may not boast an impressive total runs figure, yet they can possess a commendable batting average. This is because a higher frequency of not outs diminishes the denominator, resulting in an elevated batting average.
+
+*Inconsistency:* Players who experience sporadic bursts of exceptional scoring but falter with low scores in other innings may accumulate a substantial total run count without a correspondingly high average. The key lies in sustained performance and avoiding erratic dips, as consistency plays a pivotal role in maintaining an impressive batting average.
+
+**Strike Rates:** Batting strike rate (s/r) is defined for a batter as the average number of runs scored per 100 balls faced. The higher the strike rate, the more effective a batter is at scoring quickly.
+
+Examining the provided chart, it becomes evident that there is a discernible negative correlation between the Average Strike Rate and the Batting Average. While this correlation isn't a universal law, it can be observed in specific scenarios:
+
+Aggressive Batting Style: Batsmen who adopt an aggressive approach, taking calculated risks and aiming for quick scoring, often exhibit a higher strike rate paired with a lower batting average. The frequency of dismissals tends to be higher due to the inherent risks taken during play. However, when successful, these players score rapidly, contributing to an elevated strike rate.
+
+Safe Batting Style: Conversely, batsmen employing a more defensive strategy may showcase a higher batting average coupled with a lower strike rate. By prioritising longevity at the crease, these players minimise risks, resulting in fewer dismissals. Although their scoring rate may be comparatively lower, the reduced frequency of dismissals contributes to a superior batting average.
+
+## Epic Showdowns: A Comprehensive Analysis of ICC Cricket World Cup Finals
+
+### Chart Description
+
+For a comprehensive overview, delve into each section with three charts, each shedding light on distinct aspects of the information:
+
+**Chart 1:**
+
+In this visual representation, each bar corresponds to a specific inning, distinguished by colour. The height of the bars illustrates the runs scored during different phases of the game, as indicated on the x-axis. Circles atop the bars denote the number of wickets lost, with the size of each circle directly proportional to the corresponding wicket count.
+
+**Charts 2 and 3:**
+
+Within these charts, the y-axis represents the names of the bowlers, while the x-axis denotes the runs scored. The length of each bar is directly proportional to the runs accumulated against each bowler. The graph is organised by batsmen names, providing insights into the runs scored by each batsman against every bowler. Additionally, the colours of the stacked bars convey information about the phases of the game in which these batsmen achieved their respective run tallies.
+
+
+### ICC 2011 World Cup (Men's) Final
 ```{r}
 
 icc_2011 <- read.csv("Data_ICC_2011_F.csv")
@@ -153,8 +198,6 @@ df_2011_p1 <- icc_2011 %>%
   summarize(runs = sum(runs_off_bat)+sum(extras),
             n_wickets = sum(!is.na(wicket_type)))
 
-################ Plot Type 1 #####################
-
 df_2011_p1 %>%
   pivot_longer(innings) %>%
   ggplot(aes(x=binned_overs, y=runs, fill=factor(value)))+
@@ -162,7 +205,8 @@ df_2011_p1 %>%
   scale_x_discrete(breaks=c("[0,10)", "[10,20)","[20,30)", "[30,40)","[40,50]"),
                    labels=c("1-10", "11-20", "21-30", "31-40", "41-50"))+
   scale_y_continuous(breaks=seq(0,100,10))+
-  labs(title = "",
+  scale_fill_manual(values=c("#EE3377","#009988","#CC3311","#33BBEE", "#EE7733"))+
+  labs(title="The Ebb and Flow of the Game: Over-by-Over Runs in 10-Overs Bins",
        x = "Overs",
        y = "Runs Scores",
        fill = "Innings")+
@@ -172,10 +216,9 @@ df_2011_p1 %>%
   geom_text(vjust = 0, hjust = 0.64, label=df_2011_p1$n_wickets,
             position = position_dodge(width = 0.80),
             size=3)
-################ Plot Type 1 #####################
+```
 
-################ Plot Type 2 #####################
-
+```{r}
 inning_2 <- icc_2011[icc_2011$innings==2,]
 
 df_2011_p2a <- inning_2 %>%
@@ -184,12 +227,12 @@ df_2011_p2a <- inning_2 %>%
 
 ggplot(df_2011_p2a, aes(y=bowler, x=runs_scored, fill=binned_overs))+
   geom_col()+
+  scale_fill_manual(values=c("#EE3377","#009988","#CC3311","#33BBEE", "#EE7733"))+
   facet_wrap(~striker)+
   xlab("Runs Scored")+
   ylab("Bowler")+
   ggtitle("Runs scored by Indian Batsmen in front of Sri-Lankan Bowlers")
 
-# Plot 2
 inning_1 <- icc_2011[icc_2011$innings==1,]
 
 df_2011_p2b <- inning_1 %>%
@@ -198,17 +241,26 @@ df_2011_p2b <- inning_1 %>%
 
 ggplot(df_2011_p2b, aes(y=bowler, x=runs_scored, fill=binned_overs))+
   geom_col()+
+  scale_fill_manual(values=c("#EE3377","#009988","#CC3311","#33BBEE", "#EE7733"))+
   facet_wrap(~striker)+
   xlab("Runs Scored")+
   ylab("Bowler")+
   ggtitle("Runs scored by Sri-Lankan Batsmen in front of Indian Bowlers")
-################ Plot Type 2 #####################
-
 ```
 
-## ICC 2015 World Cup (Men's) Final
+**Interpretation**
 
-```{r}
+In the initial phase of the match, the Sri Lankan team set a commendable target for Team India to chase. The opening duo of Tharanga and Dilshan took the field, but unfortunately, Tharanga faced an early dismissal, as indicated by the concise bar corresponding to him in the early stages of the game. The standout highlight of the first innings was Mahela Jayawardene's stellar century, with the majority of his runs proving crucial in the decisive death overs. Notably, Sangakkara, the Sri Lankan captain, made a significant contribution during the middle overs, observable in the colour variations in the bar corresponding to his innings.
+
+Examining the first plot, it is evident that Sri Lanka scored fewer runs during the powerplay overs compared to India, despite losing only one wicket. The disparity in the bar heights for the last 10 overs reflects India's consistent superiority in scoring throughout the game, enabling them to successfully chase down the target in under 50 overs.
+
+Transitioning to the second innings, India faced an early setback with the departures of Virender Sehwag and the legendary Sachin Tendulkar within the first 10 overs. However, Gautam Gambhir showcased remarkable resilience, occupying the crease for an extended period and accumulating an impressive number of runs, as depicted in the plots. The Indian Captain, MS Dhoni, played a pivotal role with a stellar performance, particularly dominating in the later stages of the innings and guiding India to a triumphant victory. Yuvraj Singh's valuable contribution in the final 10 overs also played a crucial role in securing India's success.
+
+
+
+### ICC 2015 World Cup (Men's) Final
+
+```{r, include=FALSE}
 
 icc_2015 <- read.csv("Data_ICC_2015_F.csv")
 icc_2015$match_id <- NULL
@@ -226,15 +278,18 @@ df_2015_p1 <- icc_2015 %>%
   group_by(binned_overs, innings) %>%
   summarize(runs = sum(runs_off_bat)+sum(extras),
             n_wickets = sum(!is.na(wicket_type)))
+```
 
+```{r}
 df_2015_p1 %>%
   pivot_longer(innings) %>%
   ggplot(aes(x=binned_overs, y=runs, fill=factor(value)))+
   geom_col(position="dodge")+
+  scale_fill_manual(values=c("#EE3377","#009988","#CC3311","#33BBEE", "#EE7733"))+
   scale_x_discrete(breaks=c("[0,10)", "[10,20)","[20,30)", "[30,40)","[40,50]"),
                    labels=c("1-10", "11-20", "21-30", "31-40", "41-50"))+
   scale_y_continuous(breaks=seq(0,100,10))+
-  labs(title = "",
+  labs(title="The Ebb and Flow of the Game: Over-by-Over Runs in 10-Overs Bins",
        x = "Overs",
        y = "Runs Scores",
        fill = "Innings")+
@@ -244,49 +299,56 @@ df_2015_p1 %>%
   geom_text(vjust = 0, hjust = 0.64, label=df_2015_p1$n_wickets,
             position = position_dodge(width = 0.80),
             size=3)
+```
 
-################ Plot Type 1 #####################
-
-################ Plot Type 2 #####################
-
-# Plot 1
+```{r include=FALSE}
 inning_2 <- icc_2015[icc_2015$innings==2,]
 
 df_2015_p2a <- inning_2 %>%
   group_by(binned_overs, striker, bowler) %>%
   summarise(runs_scored=sum(runs_off_bat))
 
+```
+
+```{r}
 ggplot(df_2015_p2a, aes(y=bowler, x=runs_scored, fill=binned_overs))+
   geom_col()+
+  scale_fill_manual(values=c("#EE3377","#009988","#CC3311","#33BBEE", "#EE7733"))+
   facet_wrap(~striker)+
   xlab("Runs Scored")+
   ylab("Bowler")+
   ggtitle("Runs scored by Australian Batsmen in front of New Zealand Bowlers")
+```
 
-
-# Plot 2
+```{r, include=FALSE}
 inning_1 <- icc_2015[icc_2015$innings==1,]
 
 df_2015_p2b <- inning_1 %>%
   group_by(binned_overs, striker, bowler) %>%
   summarise(runs_scored=sum(runs_off_bat))
+```
 
+```{r}
 ggplot(df_2015_p2b, aes(y=bowler, x=runs_scored, fill=binned_overs))+
   geom_col()+
+  scale_fill_manual(values=c("#EE3377","#009988","#CC3311","#33BBEE", "#EE7733"))+
   facet_wrap(~striker)+
   xlab("Runs Scored")+
   ylab("Bowler")+
   ggtitle("Runs scored by New Zealand Batsmen in front of Australian Bowlers")
-################ Plot Type 2 #####################
-####################### ICC 2015 Final ######################
 
 ```
 
-## ICC 2019 World Cup (Men's) Final
-```{r}
+**Interpretation**
 
-####################### ICC 2019 Final ######################
-####### Preprocessing #######
+In the opening innings of the match, New Zealand took to the batting crease but encountered challenges in establishing a formidable target for Australia to pursue. The initial chart reveals a slow start for New Zealand, with bars of minimal height reflecting the struggle in the early overs of the game. However, despite the challenging beginning, Ross Taylor and Grant Elliott displayed resilience, mounting a commendable effort to bring New Zealand back into contention.
+
+Upon closer examination of the first plot, it becomes apparent that New Zealand scored fewer runs during the powerplay overs in comparison to England, despite only losing one wicket. The singular bar in the final bin indicates that Australia efficiently chased down the target in less than 40 overs.
+
+Transitioning to the second innings, the chart illustrates an accelerated scoring phase in the initial 10 overs, even though Aaron Finch faced dismissal without scoring. The noteworthy contributions of David Warner and Steve Smith are clearly depicted in the second plot. Following Finch's early departure, the responsibility then shifted to Michael Clarke, who played a pivotal role for Australia throughout the majority of the game.
+
+### ICC 2019 World Cup (Men's) Final
+```{r, include=FALSE}
 icc_2019 <- read.csv("Data_ICC_2019_F.csv")
 icc_2019$match_id <- NULL
 
@@ -298,24 +360,23 @@ over_intervals <- cut(icc_2019$over, breaks=seq(0,50,10),
                       include.lowest = TRUE,
                       right = FALSE)
 icc_2019$binned_overs <- over_intervals
-####### Preprocessing #######
 
-# Comment: These missing values don't indicate lack of data but are logical in nature
-
-################ Plot Type 1 #####################
 df_2019_p1 <- icc_2019 %>%
   group_by(binned_overs, innings) %>%
   summarize(runs = sum(runs_off_bat)+sum(extras),
             n_wickets = sum(!is.na(wicket_type)))
+```
 
+```{r}
 df_2019_p1 %>%
   pivot_longer(innings) %>%
   ggplot(aes(x=binned_overs, y=runs, fill=factor(value)))+
   geom_col(position="dodge")+
+  scale_fill_manual(values=c("#EE3377","#009988","#CC3311","#33BBEE", "#EE7733"))+
   scale_x_discrete(breaks=c("[0,10)", "[10,20)","[20,30)", "[30,40)","[40,50]"),
                    labels=c("1-10", "11-20", "21-30", "31-40", "41-50"))+
   scale_y_continuous(breaks=seq(0,100,10))+
-  labs(title = "",
+  labs(title="The Ebb and Flow of the Game: Over-by-Over Runs in 10-Overs Bins",
        x = "Overs",
        y = "Runs Scores",
        fill = "Innings")+
@@ -325,51 +386,67 @@ df_2019_p1 %>%
   geom_text(vjust = 0, hjust = 0.64, label=df_2019_p1$n_wickets,
             position = position_dodge(width = 0.80),
             size=3)
-################ Plot Type 1 #####################
+```
 
-
-
-################ Plot Type 2 #####################
-
-# Plot 1
+```{r, include=FALSE}
 inning_2 <- icc_2019[icc_2019$innings==2,]
 
 df_2019_p2a <- inning_2 %>%
   group_by(binned_overs, striker, bowler) %>%
   summarise(runs_scored=sum(runs_off_bat))
+```
 
+```{r}
 ggplot(df_2019_p2a, aes(y=bowler, x=runs_scored, fill=binned_overs))+
   geom_col()+
+  scale_fill_manual(values=c("#EE3377","#009988","#CC3311","#33BBEE", "#EE7733"))+
   facet_wrap(~striker)+
   xlab("Runs Scored")+
   ylab("Bowler")+
   ggtitle("Runs scored by New Zealand Batsmen in front of England Bowlers")
+```
 
-
-# Plot 2
+```{r, include=FALSE}
 inning_1 <- icc_2019[icc_2019$innings==1,]
 
 df_2019_p2b <- inning_1 %>%
   group_by(binned_overs, striker, bowler) %>%
   summarise(runs_scored=sum(runs_off_bat))
 
+```
+
+```{r}
 ggplot(df_2019_p2b, aes(y=bowler, x=runs_scored, fill=binned_overs))+
   geom_col()+
+  scale_fill_manual(values=c("#EE3377","#009988","#CC3311","#33BBEE", "#EE7733"))+
   facet_wrap(~striker)+
   xlab("Runs Scored")+
   ylab("Bowler")+
   ggtitle("Runs scored by England Batsmen in front of New Zealand Bowlers")
-################ Plot Type 2 #####################
-####################### ICC 2019 Final ######################
+
 
 ```
 
-## ICC 2023 World Cup (Men's) Final
+**Interpretation**
 
-```{r}
+This game stands out in its uniqueness, particularly evident in the unconventional occurrence of four innings during the 2019 World Cup Finals. As depicted in the charts, both teams managed to score an identical number of runs at the end of the standard 50 overs, leading to the implementation of a "Super Over" decision-making strategy. In this format, each team is granted the opportunity to play one over, and the team scoring the highest number of runs is declared the winner.
 
-####################### ICC 2023 Final ######################
-####### Preprocessing #######
+Remarkably, the Super Over resulted in yet another tie, prompting an unprecedented resolution method—the team that hit the most boundaries would be declared the ultimate victor. This decision sparked considerable controversy within the cricketing world.
+
+While other insights from the chart align with patterns observed in the 2011 and 2015 Finals, a notable detail emerges: England lost six wickets in the second innings during the last 10 overs of the game. This can be attributed, in part, to the heightened stress inherent in such a high-stakes match. In an attempt to score quickly, England's batsmen took risks that ultimately led to their dismissals. This underscores the impact of pressure on decision-making and performance, especially in crucial moments of the game.
+
+### Diving down further...
+
+A fascinating correlation to note lies in the relationship between the runs scored during the power play (the initial 10 overs of the game) and the ultimate outcome of the match. In the world cup finals of 2011, 2015 and 2019, the team that accumulated more runs during the power play emerged victorious. The power play, characterised by the restriction of only two fielders outside the 30-yard circle, provides a favourable scenario for the batting team to target boundaries (4s and 6s). With limited fielders to prevent the ball from reaching the boundary, the batting team has ample opportunity to score during this phase.
+
+This period becomes a critical juncture for teams, as a substantial accumulation of runs during the power play lays the foundation for setting a higher target for the opposition. The heightened risk-taking by batsmen during this phase often results in the loss of wickets, contributing to the dynamic nature of the game. While not an absolute rule, this trend is commonly observed in high-stakes matches where batsmen strategically aim to maximise their runs during the power play, leveraging the advantage presented by the fielding restrictions.
+
+
+
+### ICC 2023 World Cup (Men's) Final
+
+```{r, include=FALSE}
+
 icc_2023 <- read.csv("Data_ICC_2023_F.csv")
 icc_2023$match_id <- NULL
 
@@ -381,22 +458,23 @@ over_intervals <- cut(icc_2023$over, breaks=seq(0,50,10),
                       include.lowest = TRUE,
                       right = FALSE)
 icc_2023$binned_overs <- over_intervals
-####### Preprocessing #######
 
-################ Plot Type 1 #####################
 df_2023_p1 <- icc_2023 %>%
   group_by(binned_overs, innings) %>%
   summarize(runs = sum(runs_off_bat)+sum(extras),
             n_wickets = sum(!is.na(wicket_type)))
+```
 
+```{r}
 df_2023_p1 %>%
   pivot_longer(innings) %>%
   ggplot(aes(x=binned_overs, y=runs, fill=factor(value)))+
   geom_col(position="dodge")+
+  scale_fill_manual(values=c("#EE3377","#009988","#CC3311","#33BBEE", "#EE7733"))+
   scale_x_discrete(breaks=c("[0,10)", "[10,20)","[20,30)", "[30,40)","[40,50]"),
                    labels=c("1-10", "11-20", "21-30", "31-40", "41-50"))+
   scale_y_continuous(breaks=seq(0,100,10))+
-  labs(title = "",
+  labs(title="The Ebb and Flow of the Game: Over-by-Over Runs in 10-Overs Bins",
        x = "Overs",
        y = "Runs Scores",
        fill = "Innings")+
@@ -406,42 +484,76 @@ df_2023_p1 %>%
   geom_text(vjust = 0, hjust = 0.64, label=df_2023_p1$n_wickets,
             position = position_dodge(width = 0.80),
             size=3)
-################ Plot Type 1 #####################
+```
 
-
-
-################ Plot Type 2 #####################
-
-# Plot 1
+```{r, include=FALSE}
 inning_2 <- icc_2023[icc_2023$innings==2,]
 
 df_2023_p2a <- inning_2 %>%
   group_by(binned_overs, striker, bowler) %>%
   summarise(runs_scored=sum(runs_off_bat))
 
+```
+
+```{r}
+
 ggplot(df_2023_p2a, aes(y=bowler, x=runs_scored, fill=binned_overs))+
   geom_col()+
+  scale_fill_manual(values=c("#EE3377","#009988","#CC3311","#33BBEE", "#EE7733"))+
   facet_wrap(~striker)+
   xlab("Runs Scored")+
   ylab("Bowler")+
   ggtitle("Runs scored by Australian Batsmen in front of Indian Bowlers")
+```
 
-
-# Plot 2
+```{r, include=FALSE}
 inning_1 <- icc_2023[icc_2023$innings==1,]
 
 df_2023_p2b <- inning_1 %>%
   group_by(binned_overs, striker, bowler) %>%
   summarise(runs_scored=sum(runs_off_bat))
+```
 
+```{r}
 ggplot(df_2023_p2b, aes(y=bowler, x=runs_scored, fill=binned_overs))+
   geom_col()+
+  scale_fill_manual(values=c("#EE3377","#009988","#CC3311","#33BBEE", "#EE7733"))+
   facet_wrap(~striker)+
   xlab("Runs Scored")+
   ylab("Bowler")+
   ggtitle("Runs scored by Indian Batsmen in front of Australian Bowlers")
-################ Plot Type 2 #####################
-####################### ICC 2023 Final ######################
+```
+
+**Interpretation**
+
+The recent cricket match that transpired on November 19 showcased a noteworthy contest between India and Australia, culminating in a victory for the latter. The initial phase of the game, as indicated by the first plot, underscored India's pronounced dominance in the first 10 overs. During this period, India exhibited superior run-scoring prowess while minimizing wicket losses. However, the dynamics of the game shifted significantly thereafter.
+
+Beyond the initial 10 overs, Australia seized control and maintained their ascendancy throughout the remainder of the match. Despite the early dismissals of key players such as Warner, Smith, and Marsh, Australia remarkably avoided further setbacks, with only one wicket falling between overs 40 and 50. Travis Head emerged as the standout performer for Australia, anchoring the innings and ensuring their successful pursuit of the target.
+
+A notable departure from the patterns observed in other World Cup finals is evident in this match. Contrary to the historical trend, the team that scored more runs during the powerplay (overs 1-10) - in this case, India - ultimately found themselves on the losing side. This deviation adds a distinctive dimension to the narrative of the World Cup final, highlighting the unpredictable nature of cricket and the capacity for momentum shifts in the course of a match.
+
+## Toss or Tussle? Examining the Weight of the Coin Flip in Cricket Matches
+
+```{r Mosaic}
+
+toss <- read.csv("toss_data.csv")
+toss <- toss[!(toss$Team=="PAK"|toss$Team=="SL"|toss$Team=="WI"),]
+
+colors_fill <- c("#3498db", "#e74c3c")
+
+library(vcd)
+
+mosaic(Toss_Won~Team+Format, toss, 
+       highlighting_fill = colors_fill, 
+       direction=c("v","v","h")
+       )
 
 ```
 
+**Interpretation**
+
+While not a steadfast rule, an intriguing correlation emerges when examining the relation between winning the toss and winning the game, particularly among the top 5 cricket teams on the world stage. Notably, teams like Australia and South Africa exhibit a high likelihood of winning the game in ODIs if they successfully win the toss. On the contrary, teams like India and New Zealand seem unaffected by the toss outcome in ODIs. It is interesting to observe that, with the exception of England, these teams have won the toss and the subsequent game less frequently than when they have lost the toss but still emerged victorious.
+
+A surprising statistic is India's record in Test Matches, where they have not won a game after winning the toss from 2016 till present. Conversely, England seems to have often benefited from winning the toss in Test Matches. This trend might suggest that other teams could potentially improve their outcomes by making more advantageous decisions when winning the toss.
+
+In the case of T20Is, every team has won the toss and the subsequent game less frequently than when they have lost the toss but still managed to secure a victory. Given the fast-paced nature of T20 cricket, drawing concrete conclusions about this phenomenon proves challenging. Nevertheless, it remains an intriguing aspect worth exploring further.
