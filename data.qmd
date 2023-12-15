@@ -57,6 +57,28 @@ library(gridExtra)
    
    + Issues/Problems: While Cricsheet data is comprehensive, occasional errors or missing information may be present. The reliance on volunteers for data input might introduce some level of inconsistency.
 
+**3. Howstat:**
+
+- Data Collection: Howstat is a cricket statistics website that gathers data on player performances, team statistics, and various cricket-related metrics. The platform is designed to provide users with comprehensive insights into player records and historical statistical trends.
+
+- Data Format: The information on Howstat is presented in a user-friendly format, primarily accessible through a menu-driven interface. Users can navigate through player menus to access specific statistics, including batting, bowling, and fielding records.
+
+- Frequency of Updates: Howstat regularly updates its statistics, offering a historical perspective on players and teams. The platform covers a wide range of cricket formats, including Tests, ODIs, and T20Is.
+
+- Issues/Problems: While Howstat is a valuable resource for cricket statistics, users should be aware that occasional variations or discrepancies in the data may exist. It is recommended to cross-reference information from multiple sources for accuracy.
+
+**4. Cricket.com:**
+
+- Data Collection: Cricket.com is a cricket news and information website that occasionally publishes articles and insights backed by statistical data. The platform provides analyses, including the importance of certain aspects of the game, such as the toss in Test cricket.
+
+- Data Format: Cricket.com delivers information in an article-based format, offering insights supported by statistical data. Users can refer to specific articles to gain an understanding of statistical trends and their implications in cricket.
+
+- Frequency of Updates: Cricket.com updates its content regularly, providing a mix of news, analyses, and statistical information. However, the frequency may vary depending on the nature of the content.
+
+- Issues/Problems: While Cricket.com serves as a valuable source for cricket-related insights, users should note that the platform may not focus exclusively on statistics. Therefore, for in-depth statistical analysis, users may need to complement information from Cricket.com with data from dedicated statistical platforms.
+
+
+
 ### Data Parsing and Analysis:
 
 **cricketdata R Package:**
@@ -69,7 +91,9 @@ library(gridExtra)
 
 *In conclusion, our cricket data visualization project leverages the comprehensive statistics from ESPN Cricinfo and the detailed ball-by-ball data from Cricsheet. The integration of these reputable sources is facilitated by the efficient parsing capabilities of the "cricketdata" R package. By acknowledging potential issues with data quality and using a robust analysis tool, we aim to provide insightful visualizations that enhance the understanding of player and team performance across various cricket formats.*
 
-## Preprocessing of Data
+## Data Preprocessing
+
+Expand the following blocks to learn more about how preprocessing for the plots was performed.
 
 ```{r preprocessing}
 
@@ -209,7 +233,14 @@ Research Question: *What tales are woven in the ODIs World Cup finals from 2011 
 
 Data Utilization: Cricsheet's ball-by-ball data becomes instrumental here. By dissecting the distribution of runs scored by each batsman based on the bowlers, we can unravel the narratives within World Cup finals. Additionally, scrutinizing the economy rates of bowlers provides insights into the strategies employed during these high-stakes matches.
 
-**4. Individual Portraits of Cricketing Titans:**
+**4. Impact of Toss on Match Results:**
+
+Research Question: *Is there a correlation between winning the toss and emerging victorious in cricket matches over the past decade?*
+
+Data Utilization: Cricket.com provides comprehensive data on toss outcomes and match results, serving as a valuable dataset for conducting a visual analysis of this research question.
+
+
+**5. Individual Portraits of Cricketing Titans:**
 
 Research Question: *What are the strengths and weaknesses of individual cricketing titans in the current decade?*
 

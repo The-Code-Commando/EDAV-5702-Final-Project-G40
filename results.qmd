@@ -159,9 +159,9 @@ There are several factors contributing to this:
 
 Examining the provided chart, it becomes evident that there is a discernible negative correlation between the Average Strike Rate and the Batting Average. While this correlation isn't a universal law, it can be observed in specific scenarios:
 
-Aggressive Batting Style: Batsmen who adopt an aggressive approach, taking calculated risks and aiming for quick scoring, often exhibit a higher strike rate paired with a lower batting average. The frequency of dismissals tends to be higher due to the inherent risks taken during play. However, when successful, these players score rapidly, contributing to an elevated strike rate.
+*Aggressive Batting Style:* Batsmen who adopt an aggressive approach, taking calculated risks and aiming for quick scoring, often exhibit a higher strike rate paired with a lower batting average. The frequency of dismissals tends to be higher due to the inherent risks taken during play. However, when successful, these players score rapidly, contributing to an elevated strike rate.
 
-Safe Batting Style: Conversely, batsmen employing a more defensive strategy may showcase a higher batting average coupled with a lower strike rate. By prioritising longevity at the crease, these players minimise risks, resulting in fewer dismissals. Although their scoring rate may be comparatively lower, the reduced frequency of dismissals contributes to a superior batting average.
+*Safe Batting Style:* Conversely, batsmen employing a more defensive strategy may showcase a higher batting average coupled with a lower strike rate. By prioritising longevity at the crease, these players minimise risks, resulting in fewer dismissals. Although their scoring rate may be comparatively lower, the reduced frequency of dismissals contributes to a superior batting average.
 
 ## Epic Showdowns: A Comprehensive Analysis of ICC Cricket World Cup Finals
 
@@ -177,6 +177,7 @@ In this visual representation, each bar corresponds to a specific inning, distin
 
 Within these charts, the y-axis represents the names of the bowlers, while the x-axis denotes the runs scored. The length of each bar is directly proportional to the runs accumulated against each bowler. The graph is organised by batsmen names, providing insights into the runs scored by each batsman against every bowler. Additionally, the colours of the stacked bars convey information about the phases of the game in which these batsmen achieved their respective run tallies.
 
+**We have made sure that all the charts henceforth are colour-blind friendly to ensure that our visualziations are accessible to everyone**
 
 ### ICC 2011 World Cup (Men's) Final
 ```{r}
@@ -539,7 +540,7 @@ A notable departure from the patterns observed in other World Cup finals is evid
 toss <- read.csv("toss_data.csv")
 toss <- toss[!(toss$Team=="PAK"|toss$Team=="SL"|toss$Team=="WI"),]
 
-colors_fill <- c("#3498db", "#e74c3c")
+colors_fill <- c("#33BBEE", "#EE7733")
 
 library(vcd)
 

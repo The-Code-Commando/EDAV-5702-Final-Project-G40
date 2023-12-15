@@ -36,7 +36,7 @@ loadData(url).then(function(objects) {
 
   const color = d3.scaleOrdinal()
     .domain(["caught", "bowled", "stumped", "caught_behind", "lbw", "run_out", "others"])
-    .range(d3.schemeDark2);
+    .range(["#CC6677","#332288","#DDCC77","#117733","#88CCEE","#882255","#44AA99"]);
 
   const tooltip = d3.select("div#plot")
     .append("div")
