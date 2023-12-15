@@ -558,3 +558,5 @@ While not a steadfast rule, an intriguing correlation emerges when examining the
 A surprising statistic is India's record in Test Matches, where they have not won a game after winning the toss from 2016 till present. Conversely, England seems to have often benefited from winning the toss in Test Matches. This trend might suggest that other teams could potentially improve their outcomes by making more advantageous decisions when winning the toss.
 
 In the case of T20Is, every team has won the toss and the subsequent game less frequently than when they have lost the toss but still managed to secure a victory. Given the fast-paced nature of T20 cricket, drawing concrete conclusions about this phenomenon proves challenging. Nevertheless, it remains an intriguing aspect worth exploring further.
+
+In the mosaic plot above, orange color represents the matches won, when the toss was won at the beginning of the game, and blue color represents the matches won when the toss was lost.
