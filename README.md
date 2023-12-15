@@ -1,4 +1,4 @@
-Introduction:
+## Hitting for Six: A Visual Odyssey into the Heart of the Game
 
 Our project focuses on the visualization of cricket data to derive meaningful insights. To achieve this, we have identified two primary data sources: ESPN Cricinfo StatsLinks to an external site. and CricsheetLinks to an external site.. Additionally, we will be utilizing the "cricketdata" R packageLinks to an external site. to parse and analyze the data efficiently.
 
